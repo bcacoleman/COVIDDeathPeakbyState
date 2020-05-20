@@ -1,29 +1,15 @@
-
-import csv
-import os
-import os.path
-import sys
-
-import tkinter as tk
-from tkinter import ttk as ttk
-import tkinter.filedialog as filedialog
-
-"""
-input_path = tk.filedialog.askopenfilename(filetypes=[("CSV files", ".csv")],
-                                             title='Select CSV containing COVID-19 Deaths data:')
-"""
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 import time
 
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
-#input_path = 'DeathsByState.csv'
-input_path = '/Users/bcoleman/PycharmProjects/covid-19-usa-by-state/COVID-19-Deaths-USA-By-State.csv'
-deaths = pd.read_csv(input_path,index_col='State')
+input_path = 'https://raw.githubusercontent.com/jeffcore/covid-19-usa-by-state/master/COVID-19-Deaths-USA-By-State.csv'
+deaths = pd.read_csv(input_path,index_col='State', error_bad_lines=False)
 deathDF=deaths.transpose()
 deathDF.head()
-#deathDF = deathDF.rename(columns={'State':'Date'})
 
 Cols=list(deathDF.columns)
 
@@ -105,4 +91,4 @@ TotalDF['Peak9DayAvgDate']=NineDayAvgFrame['Peak9DayAvgDate']
 
 timestr = time.strftime("%Y%m%d")
 
-TotalDF.to_csv('Output_%s.csv' % timestr)
+TotalDF.to_csv('COVID-Deaths-Peaks_%s.csv' % timestr)
